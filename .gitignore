@@ -1,6 +1,5 @@
 Shietcode/
 __pycache__/
-Matches/
-*.json
+Data/
 pyvenv.cfg
 .env

@@ -17,7 +17,7 @@ class Games:
 
         self.getMatchHistory = response.json()
 
-        with open("lastGames.json", "w") as file:
+        with open("./Data/lastGames.json", "w") as file:
             json.dump(response.json(), file, indent=4)
 
     def getMatchData(self, input):
@@ -28,7 +28,7 @@ class Games:
             + os.getenv("API_KEY")
         )
 
-        with open("./Matches/" + input + ".json", "w") as file:
+        with open("./Data/" + input + ".json", "w") as file:
             json.dump(response.json(), file, indent=4)
 
     def getMatchHistoryData(self):

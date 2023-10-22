@@ -22,7 +22,7 @@ class Summoner:
 
         self.puuid = response.json()["puuid"]
 
-        with open("summonerPuuid.json", "w") as file:
+        with open("./Data/summonerPuuid.json", "w") as file:
             json.dump(response.json(), file, indent=4)
 
     def getId(self):
@@ -35,7 +35,7 @@ class Summoner:
 
         self.id = response.json()["id"]
 
-        with open("summonerId.json", "w") as file:
+        with open("./Data/summonerId.json", "w") as file:
             json.dump(response.json(), file, indent=4)
 
     def getRankedData(self):
@@ -46,5 +46,5 @@ class Summoner:
             + os.getenv("API_KEY")
         )
 
-        with open("summonerRankedData.json", "w") as file:
+        with open("./Data/summonerRankedData.json", "w") as file:
             json.dump(response.json(), file, indent=4)
