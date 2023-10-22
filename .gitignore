@@ -1,0 +1,6 @@
+Shietcode/
+__pycache__/
+Matches/
+*.json
+pyvenv.cfg
+.env
