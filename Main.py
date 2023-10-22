@@ -10,7 +10,7 @@ import Games
 class MyGUI:
     def __init__(self):
         self.root = customtkinter.CTk()
-        self.root.geometry("225x175")
+        self.root.geometry("815x710")
         self.root.title("Shietcode")
 
         self.frame = customtkinter.CTkFrame(master=self.root)
@@ -19,22 +19,36 @@ class MyGUI:
         self.button1 = customtkinter.CTkButton(
             master=self.frame, text="Get Data", command=self.runProgramThreaded
         )
-        self.button1.pack(padx=10, pady=10)
+        self.button1.grid(row=0, column=0, padx=8, pady=8)
 
         self.entry1 = customtkinter.CTkEntry(
             master=self.frame, placeholder_text="Riot ID"
         )
-        self.entry1.pack(padx=10, pady=5)
+        self.entry1.grid(row=0, column=1, padx=8, pady=8)
 
         self.entry2 = customtkinter.CTkEntry(master=self.frame, placeholder_text="Tag")
-        self.entry2.pack(padx=10, pady=5)
+        self.entry2.grid(row=0, column=2, padx=8, pady=8)
 
-        self.prorgessbar = customtkinter.CTkProgressBar(
+        self.combobox = customtkinter.CTkComboBox(
+            master=self.frame,
+            values=[],
+            width=220,
+            state="readonly",
+        )
+        self.combobox.grid(row=0, column=3, padx=8, pady=8)
+
+        self.button2 = customtkinter.CTkButton(
+            master=self.frame, width=75, text="Show", command=self.setTextboxText
+        )
+        self.button2.grid(row=0, column=4, padx=8, pady=8)
+
+        self.textbox = customtkinter.CTkTextbox(master=self.frame, height=605)
+        self.textbox.grid(row=1, column=0, columnspan=5, padx=8, pady=5, sticky="ew")
+
+        self.progressbar = customtkinter.CTkProgressBar(
             master=self.frame,
             orientation="horizontal",
             mode="indeterminate",
-            height=8,
-            width=160,
         )
 
     def run(self):
@@ -44,15 +58,35 @@ class MyGUI:
         customtkinter.set_default_color_theme("dark-blue")
 
         # Ordner anlegen, um Fehler zu vermeiden
-        if os.path.isdir("./Matches"):
-            shutil.rmtree("./Matches")
-        os.mkdir("./Matches")
+        if os.path.isdir("./Data"):
+            shutil.rmtree("./Data")
+        os.mkdir("./Data")
 
         self.root.mainloop()
 
+    def readJsonFile(self, jsonFile):
+        with open("./Data/" + jsonFile, "r") as jsonFile:
+            output = jsonFile.read()
+        return output
+
+    def setTextboxText(self):
+        state = self.combobox.get()
+        self.textbox.delete("0.0", "end")
+        self.textbox.insert("0.0", self.readJsonFile(state))
+
+    def getJsonFiles(self):
+        jsonFileList = []
+        data = os.listdir("./Data")
+        for x in data:
+            jsonFileList.append(x)
+        return jsonFileList
+
     def runProgram(self):
-        self.prorgessbar.pack(padx=10, pady=10)
-        self.prorgessbar.start()
+        self.progressbar.grid(
+            row=2, column=0, columnspan=5, padx=8, pady=8, sticky="we"
+        )
+        self.progressbar.start()
+
         summoner1 = Summoner.Summoner(name=self.getRiotId(), tag=self.getRiotTag())
         games1 = Games.Games()
 
@@ -62,8 +96,12 @@ class MyGUI:
 
         games1.getMatchHistory(summoner1)
         games1.getMatchHistoryData()
-        self.prorgessbar.stop()
-        self.prorgessbar.pack_forget()
+
+        self.getJsonFiles()
+        self.combobox.configure(values=self.getJsonFiles())
+
+        self.progressbar.stop()
+        self.progressbar.pack_forget()
 
     def runProgramThreaded(self):
         threading.Thread(target=self.runProgram).start()
