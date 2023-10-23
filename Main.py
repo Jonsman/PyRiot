@@ -81,11 +81,19 @@ class MyGUI:
             jsonFileList.append(x)
         return jsonFileList
 
+    def deleteJsonFiles(self):
+        for x in self.getJsonFiles():
+            os.remove("./Data/" + x)
+
     def runProgram(self):
         self.progressbar.grid(
             row=2, column=0, columnspan=5, padx=8, pady=8, sticky="we"
         )
         self.progressbar.start()
+
+        self.deleteJsonFiles()
+        self.textbox.delete("0.0", "end")
+        self.combobox.set("")
 
         summoner1 = Summoner.Summoner(name=self.getRiotId(), tag=self.getRiotTag())
         games1 = Games.Games()
