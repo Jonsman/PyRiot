@@ -1,4 +1,4 @@
-# Shietcode
+# PyRiot
 
 ## infos
 * only supports the europe / euw region right now
